@@ -59,8 +59,26 @@ router.delete('/', [auth, permit('admin')], async (req, res) => {
        const review = await Review.deleteOne({_id: req.query.revID});
        const inst = await Institution.findById(req.query.instID);
        if(review.deletedCount === 0) return res.status(400).send({error: 'Вы уже удалили отзыв.'});
-       inst.rateCount--;
+
+       const reviews = await Review.find({institution: req.query.instID}).lean();
+       if(reviews.length === 0) {
+           inst.rateCount--;
+           inst.foodRating = 0;
+           inst.serviceRating = 0;
+           inst.interiorRating = 0;
+           inst.allRating = 0;
+       } else {
+           inst.rateCount--;
+           let foodRatingSum = calculateRating(reviews, 'foodRating');
+           let serviceRatingSum = calculateRating(reviews, 'serviceRating');
+           let interiorRatingSum = calculateRating(reviews, 'interiorRating');
+           inst.foodRating = (foodRatingSum / reviews.length).toFixed(1);
+           inst.serviceRating = (serviceRatingSum / reviews.length).toFixed(1);
+           inst.interiorRating = (interiorRatingSum / reviews.length).toFixed(1);
+           inst.allRating = ((inst.foodRating + inst.interiorRating + inst.serviceRating) / 3).toFixed(1);
+       }
        await inst.save();
+
        return res.send({message: 'Отзыв удалён.'});
    } catch (e) {
        return errorCatching(e, res);
