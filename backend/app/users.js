@@ -11,7 +11,7 @@ router.post('/', async (req, res) => {
        });
        user.genToken();
        await user.save();
-       return res.send(user);
+       return res.send({message: 'Вы зарегистрировались. Пожалуйста войдите в свой аккаунт.'});
    } catch (e) {
        return errorCatching(e, res);
    }
@@ -26,7 +26,7 @@ router.post('/sessions', async (req, res) => {
        user.genToken();
        await user.save({validateBeforeSave: false});
        return res.send({
-           data: {
+           user: {
                username: user.username,
                role: user.role,
                token: user.token,
@@ -41,9 +41,9 @@ router.post('/sessions', async (req, res) => {
 router.delete('/sessions', async (req, res) => {
    const token = req.get('Authorization');
    try {
-        if(!token) return res.status(400).send({message: 'Ваша сессия уже завершина.'});
+        if(!token) return res.status(400).send({error: 'Ваша сессия уже завершина.'});
         const user = await User.findOne({token});
-        if(!user) return res.status(404).send({message: 'Пользователь не найден.'});
+        if(!user) return res.status(404).send({error: 'Пользователь не найден.'});
         user.genToken();
         await user.save({validateBeforeSave: false});
         return res.send({message: `До скорой встречи ${user.username}. Вы вышли из своего аккаунта.`});
