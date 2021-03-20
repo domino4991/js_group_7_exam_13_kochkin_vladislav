@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Image = require('../models/Image');
+const Institutions = require('../models/Institution');
 
 const errorCatching = require('../middlewares/errorCatching');
 const upload = require('../middlewares/upload');
@@ -18,12 +19,16 @@ router.get('/:instID', async (req, res) => {
 
 router.post('/:instID', [auth, upload.single('image')], async (req, res) => {
    try {
+       const institution = await Institutions.findById(req.params.instID);
        const image = new Image({
            user: req.user._id,
            institution: req.params.instID,
            image: req.file.filename
        });
        await image.save();
+       institution.imagesCount++;
+       await institution.save();
+       return res.send({message: 'Фотография добавлена.'})
    } catch (e) {
        return errorCatching(e, res);
    }

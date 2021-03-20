@@ -36,6 +36,14 @@ const InstitutionSchema = new mongoose.Schema({
     allRating: {
         type: Number,
         default: 0
+    },
+    rateCount: {
+        type: Number,
+        default: 0
+    },
+    imagesCount: {
+        type: Number,
+        default: 0
     }
 });
 
