@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const Review = require('./Review');
+const Image = require('./Image');
 
 const InstitutionSchema = new mongoose.Schema({
     title: {
@@ -13,15 +15,12 @@ const InstitutionSchema = new mongoose.Schema({
     },
     mainImage: {
         type: String,
-        required: [true, 'Поле "Фотография" не должно быть пустым.']
+        default: null
     },
     description: {
         type: String,
         required: [true, 'Поле "Описание" не должно быть пустым.']
     },
-    images: [{
-        type: String
-    }],
     foodRating: {
         type: Number,
         default: 0
@@ -38,6 +37,17 @@ const InstitutionSchema = new mongoose.Schema({
         type: Number,
         default: 0
     }
+});
+
+InstitutionSchema.pre('deleteOne', async function (next) {
+    const id = this._conditions._id;
+    const reviews = await Review.find({institution: id});
+    const images = await Image.find({institution: id});
+    if(!reviews || reviews.length === 0) return next();
+    if(!images || images.length === 0) return next();
+    await Review.deleteMany({institution: id});
+    await Image.deleteMany({institution: id});
+    next();
 });
 
 const Institution = mongoose.model('Institution', InstitutionSchema);
