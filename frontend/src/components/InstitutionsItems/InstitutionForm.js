@@ -33,6 +33,7 @@ const InstitutionForm = ({state, onSubmit, onChange, error, onChangeFile, onChec
                         value={state.title}
                         changed={onChange}
                         error={error('title')}
+                        id='title-inp'
                     />
                     <FormElement
                         label='Описание'
@@ -43,6 +44,7 @@ const InstitutionForm = ({state, onSubmit, onChange, error, onChangeFile, onChec
                         error={error('description')}
                         multiline={true}
                         rows={5}
+                        id='desc-inp'
                     />
                     <FormElement
                         label='Добавить фото'
@@ -58,8 +60,9 @@ const InstitutionForm = ({state, onSubmit, onChange, error, onChangeFile, onChec
                         name='agree'
                         onCheckboxChange={onCheckboxChange}
                         checkbox
+                        id='checkbox'
                     />
-                    <Button variant='contained' type='submit'>Отправить</Button>
+                    <Button variant='contained' type='submit' id='send-btn'>Отправить</Button>
                 </form>
             </Grid>
         </>

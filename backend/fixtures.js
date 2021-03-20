@@ -34,7 +34,11 @@ db.once('open', async () => {
             mainImage: 'GcvwKOUy9FYp8SLIXzjJG.jpeg',
             agree: true,
             user: admin._id,
-            rateCount: 1
+            rateCount: 1,
+            allRating: 4.3,
+            foodRating: 5,
+            serviceRating: 3,
+            interiorRating: 5
         }, {
             title: 'Test 2',
             description: 'Test desc 2',

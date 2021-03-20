@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const InstitutionItem = ({title, image, allRating, id, rateCount, imagesCount}) => {
+const InstitutionItem = ({title, image, allRating, id, rateCount, imagesCount, i}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const {user} = useSelector(state => state.users);
@@ -57,6 +57,7 @@ const InstitutionItem = ({title, image, allRating, id, rateCount, imagesCount}) 
             <Link
                 to={`/full/${id}`}
                 className={classes.itemInner}
+                id={`link-${i}`}
             >
                 <Grid
                     className={classes.instImgBox}

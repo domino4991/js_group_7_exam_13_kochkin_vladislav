@@ -16,7 +16,7 @@ const InstitutionsItems = ({institutions}) => {
                 container
                 className={classes.container}
             >
-                {institutions && institutions.map(inst => <InstitutionItem
+                {institutions && institutions.map((inst, i) => <InstitutionItem
                     key={inst._id}
                     title={inst.title}
                     image={inst.mainImage}
@@ -24,6 +24,7 @@ const InstitutionsItems = ({institutions}) => {
                     id={inst._id}
                     rateCount={inst.rateCount}
                     imagesCount={inst.imagesCount}
+                    i={i}
                 />)}
             </Grid>
         </>

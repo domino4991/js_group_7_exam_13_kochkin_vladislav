@@ -68,6 +68,7 @@ const LoginRegisterForm = ({
                     variant='contained'
                     type='submit'
                     fullWidth
+                    id='log-reg-btn'
                     className={classes.loginRegisterFormBtn}
                 >Отправить</Button>
             </form>

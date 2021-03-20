@@ -42,6 +42,7 @@ const FormElement = ({
                         color="primary"
                     />
                 }
+                id={id}
                 label={label}
             />
         );
