@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Layout from "./components/Layout/Layout";
 import LoginRegisterPage from "./containers/LoginRegisterPage/LoginRegisterPage";
 import {useSelector} from "react-redux";
+import MainPage from "./containers/MainPage/MainPage";
 
 const ProtectedRoute = ({isAllowed, redirectTo, ...props}) => {
     return isAllowed ? (<Route {...props} />)
@@ -33,6 +34,7 @@ function App() {
                 isAllowed={!user}
                 redirectTo='/'
             />
+            <Route path='/' component={MainPage} />
         </Switch>
     </Layout>
   );
