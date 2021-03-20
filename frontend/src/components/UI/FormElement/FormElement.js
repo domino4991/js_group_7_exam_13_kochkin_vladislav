@@ -1,37 +1,37 @@
 import React from "react";
 import {
     TextField,
-    MenuItem,
-    FormControlLabel,
-    Checkbox,
+    makeStyles
 } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import PropTypes from 'prop-types';
+import FileInput from "./FileInput";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+
+const useStyles = makeStyles(theme => ({
+    gridItem: {
+        marginBottom: theme.spacing(3)
+    }
+}));
 
 const FormElement = ({
-    id,
-    name,
-    label,
-    value,
-    onChange,
-    required,
-    error,
-    type,
-    select,
-    options,
-    multiline,
-    rows,
-    hide,
-    checkbox,
-    margin,
-    size
-}) => {
-    let inputChildren = null;
-    if (hide) return null;
-    const onCheckboxChange = (event) => {
-        event.target.value = event.target.checked;
-        onChange(event);
-    };
+                         type,
+                         name,
+                         value,
+                         changed,
+                         error,
+                         label,
+                         id,
+                         changedFile,
+                         multiline,
+                         rows,
+                         required,
+                         margin,
+                         onCheckboxChange,
+    checkbox
+                     }) => {
+    const classes = useStyles();
     if (checkbox)
         return (
             <FormControlLabel
@@ -45,57 +45,44 @@ const FormElement = ({
                 label={label}
             />
         );
-    if (options) {
-        inputChildren = options.map((option) => (
-            <MenuItem key={option} value={option} id={{ id }}>
-                {option}
-            </MenuItem>
-        ));
-    }
     return (
-        <Grid item xs={12}>
-            <TextField
-                variant="outlined"
+        <Grid item xs={12} className={classes.gridItem}>
+            {type !== 'file' ? <TextField
                 fullWidth
-                select={select}
-                required={required}
-                error={!!error}
-                helperText={error}
-                id={id}
-                label={label}
                 type={type}
-                name={name}
-                value={value}
-                onChange={onChange}
-                autoComplete='off'
                 multiline={multiline}
                 rows={rows}
+                name={name}
+                value={value}
+                onChange={changed}
+                error={!!error}
+                helperText={error}
+                label={label}
+                variant='outlined'
+                id={id}
+                required={required}
                 margin={margin}
-                size={size}
-            >
-                {inputChildren}
-            </TextField>
+            /> : <FileInput
+                onChange={changedFile}
+                label={label}
+                name={name}
+                error={error}
+                id={id}
+            />}
         </Grid>
     );
 };
 
 FormElement.propTypes = {
-    id: PropTypes.string.isRequired,
+    type: PropTypes.string,
     name: PropTypes.string.isRequired,
+    value: PropTypes.any,
     label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    required: PropTypes.bool.isRequired,
-    error: PropTypes.any,
-    type: PropTypes.string.isRequired,
-    select: PropTypes.bool,
-    options: PropTypes.array,
+    error: PropTypes.string,
+    changed: PropTypes.func,
+    id: PropTypes.string,
     multiline: PropTypes.bool,
-    rows: PropTypes.bool,
-    hide: PropTypes.bool,
-    checkbox: PropTypes.bool,
-    margin: PropTypes.string,
-    size: PropTypes.string
+    rows: PropTypes.number
 }
 
 export default FormElement;

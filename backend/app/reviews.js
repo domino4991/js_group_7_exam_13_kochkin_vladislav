@@ -19,6 +19,11 @@ router.get('/:instID', async (req, res) => {
 
 router.post('/:instID', [auth], async (req, res) => {
     try {
+        const reviewCheck = await Review.findOne({institution: req.params.instID});
+        if(reviewCheck
+            && reviewCheck.user.toString() === req.user._id.toString()
+        ) return res.status(400).send({message: 'Вы не можете добавить два отзыва на одно заведение.'})
+
         const institution = await Institution.findById(req.params.instID);
         if(institution.user.toString() === req.user._id.toString()) return res.status(400).send({error: 'Вы не можете оценить своё же заведение.'});
         const review = new Review({
@@ -49,10 +54,13 @@ router.post('/:instID', [auth], async (req, res) => {
     }
 });
 
-router.delete('/:revID', [auth, permit('admin', 'user')], async (req, res) => {
+router.delete('/', [auth, permit('admin')], async (req, res) => {
    try {
-       const review = await Review.deleteOne({_id: req.params.revID});
+       const review = await Review.deleteOne({_id: req.query.revID});
+       const inst = await Institution.findById(req.query.instID);
        if(review.deletedCount === 0) return res.status(400).send({error: 'Вы уже удалили отзыв.'});
+       inst.rateCount--;
+       await inst.save();
        return res.send({message: 'Отзыв удалён.'});
    } catch (e) {
        return errorCatching(e, res);

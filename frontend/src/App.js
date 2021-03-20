@@ -8,6 +8,8 @@ import Layout from "./components/Layout/Layout";
 import LoginRegisterPage from "./containers/LoginRegisterPage/LoginRegisterPage";
 import {useSelector} from "react-redux";
 import MainPage from "./containers/MainPage/MainPage";
+import FullPage from "./containers/FullPage/FullPage";
+import CreateInstitutionPage from "./containers/CreateInstitutionPage/CreateInstitutionPage";
 
 const ProtectedRoute = ({isAllowed, redirectTo, ...props}) => {
     return isAllowed ? (<Route {...props} />)
@@ -34,7 +36,14 @@ function App() {
                 isAllowed={!user}
                 redirectTo='/'
             />
-            <Route path='/' component={MainPage} />
+            <ProtectedRoute
+                path={`/add-new-institution`}
+                component={CreateInstitutionPage}
+                isAllowed={user}
+                redirectTo='/'
+            />
+            <Route path='/' exact component={MainPage} />
+            <Route path='/full/:id' component={FullPage} />
         </Switch>
     </Layout>
   );

@@ -5,10 +5,13 @@ import { Rating } from '@material-ui/lab';
 import imagePlaceholder from '../../../assets/images/image-placeholder-350x350.png';
 import {Link} from "react-router-dom";
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
+import Button from "@material-ui/core/Button";
+import {useDispatch, useSelector} from "react-redux";
+import {deleteInst} from "../../../store/actions/institutionActions";
 
 const useStyles = makeStyles(theme => ({
     instImgBox: {
-
+        flexGrow: 1
     },
     instImg: {
         width: '100%',
@@ -25,7 +28,11 @@ const useStyles = makeStyles(theme => ({
     },
     itemInner: {
         color: '#000',
-        textDecoration: 'none'
+        textDecoration: 'none',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        height: '100%'
     },
     photosCount: {
         display: 'flex',
@@ -36,6 +43,8 @@ const useStyles = makeStyles(theme => ({
 
 const InstitutionItem = ({title, image, allRating, id, rateCount, imagesCount}) => {
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const {user} = useSelector(state => state.users);
     const imageUrl = image ? `${urlApi}/uploads/${image}` : imagePlaceholder;
     return (
         <Grid
@@ -80,6 +89,8 @@ const InstitutionItem = ({title, image, allRating, id, rateCount, imagesCount}) 
                 >
                     <PhotoCameraIcon /> <span style={{marginLeft: '10px'}} >{imagesCount} фотографий</span>
                 </Typography>
+                {user && user.role === 'admin' && <Button type='button' fullWidth variant='contained'
+                         onClick={() => dispatch(deleteInst(id))}>Удалить</Button>}
             </Link>
         </Grid>
     );

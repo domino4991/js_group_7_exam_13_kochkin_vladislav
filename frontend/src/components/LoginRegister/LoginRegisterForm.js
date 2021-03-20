@@ -44,7 +44,7 @@ const LoginRegisterForm = ({
                 onSubmit={onSubmit}
             >
                 <FormElement
-                    onChange={onChange}
+                    changed={onChange}
                     value={state.username}
                     id='username'
                     label='Логин'
@@ -55,7 +55,7 @@ const LoginRegisterForm = ({
                     margin='normal'
                 />
                 <FormElement
-                    onChange={onChange}
+                    changed={onChange}
                     value={state.password}
                     id='password'
                     label='Пароль'

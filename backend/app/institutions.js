@@ -28,7 +28,9 @@ router.get('/:instID', async (req, res) => {
 
 router.post('/', [auth, upload.single('mainImage')], async (req, res) => {
    try {
-        if(!req.body.isAgree) return res.status(400).send({error: 'Вы должны принять условия соглашения.'});
+       if(!JSON.parse(req.body.agree)) {
+           return res.status(400).send({error: 'Вы должны принять условия соглашения.'});
+       }
         const newInstitution = new Institution({
             title: req.body.title,
             description: req.body.description,
@@ -36,7 +38,7 @@ router.post('/', [auth, upload.single('mainImage')], async (req, res) => {
         });
         if(req.file) newInstitution.mainImage = req.file.filename;
         await newInstitution.save();
-        return res.send(newInstitution);
+        return res.send({message: 'Заведение добавлено.'});
    } catch (e) {
        return errorCatching(e, res);
    }

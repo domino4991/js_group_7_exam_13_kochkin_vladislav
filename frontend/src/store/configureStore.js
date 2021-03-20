@@ -5,13 +5,17 @@ import {connectRouter, routerMiddleware} from 'connected-react-router';
 import {saveToLocalStorage, loadFromLocalStorage} from "./localStorage";
 import {userReducer} from "./reducers/userReducer";
 import {institutionReducer} from "./reducers/institutionReducer";
+import {imagesReducer} from "./reducers/imagesReducer";
+import {reviewsReducer} from "./reducers/reviewsReducer";
 
 export const history = createBrowserHistory();
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__|| compose;
 const rootReducer = combineReducers({
     router: connectRouter(history),
     users: userReducer,
-    institutions: institutionReducer
+    institutions: institutionReducer,
+    images: imagesReducer,
+    reviews: reviewsReducer
 });
 
 const persistedState = loadFromLocalStorage();

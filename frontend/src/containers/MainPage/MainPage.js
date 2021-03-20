@@ -3,10 +3,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {getInstitutions} from "../../store/actions/institutionActions";
 import InstitutionsItems from "../../components/InstitutionsItems/InstitutionsItems";
 import {Container, makeStyles, Typography} from "@material-ui/core";
+import {CLEAR_ERRORS} from "../../store/actionTypes";
 
 const useStyles = makeStyles(theme => ({
     mainPageTitle: {
         marginBottom: theme.spacing(4)
+    },
+    container: {
+        marginBottom: '200px'
     }
 }))
 
@@ -17,10 +21,11 @@ const MainPage = () => {
 
     useEffect(() => {
         dispatch(getInstitutions());
+        dispatch({type: CLEAR_ERRORS});
     }, [dispatch]);
 
     return (
-        <Container maxWidth='lg'>
+        <Container maxWidth='lg' className={classes.container}>
             <Typography
                 variant='h4'
                 component='h2'
