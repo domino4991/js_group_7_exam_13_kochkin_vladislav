@@ -33,7 +33,6 @@ router.post('/:instID', [auth], async (req, res) => {
         await review.save();
         const reviews = await Review.find({institution: req.params.instID}).lean();
         if(review.foodRating !== 0 || review.serviceRating !== 0 || review.interiorRating !== 0) {
-            institution.rateCount++;
             let foodRatingSum = calculateRating(reviews, 'foodRating');
             let serviceRatingSum = calculateRating(reviews, 'serviceRating');
             let interiorRatingSum = calculateRating(reviews, 'interiorRating');
