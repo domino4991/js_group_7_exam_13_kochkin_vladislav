@@ -41,10 +41,6 @@ const InstitutionSchema = new mongoose.Schema({
 
 InstitutionSchema.pre('deleteOne', async function (next) {
     const id = this._conditions._id;
-    const reviews = await Review.find({institution: id});
-    const images = await Image.find({institution: id});
-    if(!reviews || reviews.length === 0) return next();
-    if(!images || images.length === 0) return next();
     await Review.deleteMany({institution: id});
     await Image.deleteMany({institution: id});
     next();
