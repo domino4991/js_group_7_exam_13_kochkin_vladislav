@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const User = require('../models/User');
-const {ValidationError, CastError} = require('mongoose').Error;
+
+const errorCatching = require('../middlewares/errorCatching');
 
 router.post('/', async (req, res) => {
    try {
@@ -12,13 +13,7 @@ router.post('/', async (req, res) => {
        await user.save();
        return res.send(user);
    } catch (e) {
-       if(e instanceof ValidationError) {
-           return res.status(400).send(e);
-       } else if(e instanceof CastError) {
-           return res.status(400).send({error: 'Передан не верный ID.'});
-       } else {
-           return res.status(500).send({error: 'Eternal Server Error.'});
-       }
+       return errorCatching(e, res);
    }
 });
 
@@ -39,13 +34,7 @@ router.post('/sessions', async (req, res) => {
            message: `Добро пожаловать ${user.username}!`
        });
    } catch (e) {
-       if(e instanceof ValidationError) {
-           return res.status(400).send(e);
-       } else if(e instanceof CastError) {
-           return res.status(400).send({error: 'Передан не верный ID.'});
-       } else {
-           return res.status(500).send({error: 'Eternal Server Error.'});
-       }
+       return errorCatching(e, res);
    }
 });
 
